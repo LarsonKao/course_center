@@ -42,7 +42,7 @@ module Api::V1
     end
 
     def current_student
-      @current_student = current_user.student
+      @current_student ||= current_user.student
     end
 
     def create_params

@@ -10,6 +10,9 @@ existing_student:
 forbidden_client_id:
   error_code: 403_000
   error_message: invalid client id
+create_course_forbidden:
+  error_code: 403_001 
+  error_message: have no auth to create
 
 #:not_found 404
 not_found_teacher:
@@ -18,6 +21,9 @@ not_found_teacher:
 not_found_student:
   error_code: 404_001
   error_message: not found student
+not_found_course:
+  error_code: 404_002
+  error_message: not found course
 
 #:unprocessable_entity 422
 unprocessable_entity_result:

@@ -38,11 +38,11 @@ module Api::V1
     private
 
     def check_current_teacher!
-      return error_response(:not_found_teacher) if current_teacher.nil?
+      error_response(:not_found_teacher) if current_teacher.nil?
     end
 
     def current_teacher
-      current_teacher = current_user.teacher
+      current_teacher ||= current_user.teacher
     end
 
     def create_params

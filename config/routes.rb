@@ -3,8 +3,6 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resource :users, only: %i[show create destroy update] do
-        collection do
-        end
       end
 
       resource :teachers, only: %i[show create update destroy] do
@@ -13,8 +11,9 @@ Rails.application.routes.draw do
       end
 
       resource :students, only: %i[show create update destroy] do
-        collection do
-        end
+      end
+
+      resource :courses, only: %i[show create update destroy] do
       end
     end
   end
