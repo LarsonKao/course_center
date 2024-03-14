@@ -2,3 +2,13 @@
 forbidden_client_id:
   error_code: 403_000
   error_message: invalid client id
+
+#:not_found 404
+not_found_teacher:
+  error_code: 404_000
+  error_message: not found teacher
+
+#:unprocessable_entity 422
+unprocessable_entity_result:
+  error_code: 422_000
+  error_message: unprocessable entity
