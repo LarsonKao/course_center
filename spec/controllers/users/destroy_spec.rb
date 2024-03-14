@@ -25,6 +25,13 @@ RSpec.describe User, type: :request do
         expect(after).to be_nil
       end
 
+      it "should delete the teacher" do
+        teacher_id = user.teacher.id
+        delete(path, headers: {Authorization: "Bearer #{valid_token.token}"})
+        result = Teacher.find_by(id: teacher_id)
+        expect(result).to be_nil
+      end
+
       it "should delete the token" do
         before_valid_token = Doorkeeper::AccessToken.find_by(id: valid_token.id)
         expect(before_valid_token).to eq(valid_token)

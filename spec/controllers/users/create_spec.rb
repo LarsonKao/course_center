@@ -11,7 +11,8 @@ RSpec.describe User, type: :request do
       email: 'test@example.com',
       password: 'password',
       client_id: client.uid,
-      name: 'John Doe'
+      name: 'John Doe',
+      lab: 'F102'
       }
     end
 
@@ -22,6 +23,14 @@ RSpec.describe User, type: :request do
         created_user = User.find_by(email: params[:email])
 
         expect(created_user.email).not_to eq(nil)
+      end
+
+      it "should create a new teacher" do
+        post(path, headers: json_headers, params: params.to_json)
+
+        created_user = User.find_by(email: params[:email])
+
+        expect(created_user).not_to eq(nil)
       end
 
       it "should return http status code 200" do

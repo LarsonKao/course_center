@@ -11,5 +11,9 @@ FactoryBot.define do
     password { "password" }
     sequence(:name) { |n| "Teacher #{n}" }
     permissions { ["teacher"] }
+
+    after(:create) do |user|
+      create(:teacher, user: user)
+    end
   end
 end

@@ -8,12 +8,18 @@ module Api::V1
 
     def create
       client_app = Doorkeeper::Application.find_by(uid: params[:client_id])
+      return error_response(:forbidden_client_id) unless client_app
 
       permissions = client_app.scopes.to_a
       user = User.new(create_params(permissions))
-      return error_response(:forbidden_client_id) unless client_app
+      companion = true
+      if permissions.include?("teacher")
+        companion = Teacher.new(teacher_params)
+        user.teacher = companion
+      elsif permissions.include?("student")
+      end
 
-      if user.save
+      if user.save && companion.save
         access_token = Doorkeeper::AccessToken.create(
           resource_owner_id: user.id,
           application_id: client_app.id,
@@ -21,6 +27,8 @@ module Api::V1
           expires_in: Doorkeeper.configuration.access_token_expires_in.to_i,
           scopes: ''
         )
+
+
 
         success_response(
             id: user.id,
@@ -63,7 +71,7 @@ module Api::V1
     end
 
     def teacher_params
-      params.permit(:fab)
+      params.permit(:lab)
     end
 
     def update_params
