@@ -2,6 +2,10 @@ module Api::V1
   class UsersController < ApplicationController
     skip_before_action :doorkeeper_authorize!, only: [:create]
 
+    def show
+      success_response(current_user)
+    end
+
     def create
       client_app = Doorkeeper::Application.find_by(uid: params[:client_id])
 

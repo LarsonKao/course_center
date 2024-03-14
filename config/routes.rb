@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resource :users, only: %i[create destroy update] do
+      resource :users, only: %i[show create destroy update] do
         collection do
         end
       end
