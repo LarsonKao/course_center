@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_14_155337) do
+ActiveRecord::Schema.define(version: 2024_03_14_164151) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,14 @@ ActiveRecord::Schema.define(version: 2024_03_14_155337) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
+  create_table "students", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "status", default: "inactive", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_students_on_user_id"
+  end
+
   create_table "teachers", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "lab"
@@ -80,5 +88,6 @@ ActiveRecord::Schema.define(version: 2024_03_14_155337) do
 
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "students", "users"
   add_foreign_key "teachers", "users"
 end
