@@ -1,5 +1,6 @@
 FactoryBot.define do
-  factory :teacher do
-    user { nil }
+  factory :teachers, class: 'Teacher' do
+    user { association :users }
+    sequence(:lab) { |n| "Lab #{n}" }
   end
 end
