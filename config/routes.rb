@@ -7,7 +7,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resource :teachers, only: %i[create update destroy] do
+      resource :teachers, only: %i[show create update destroy] do
         collection do
         end
       end
