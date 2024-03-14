@@ -15,6 +15,9 @@ forbidden_client_id:
 not_found_teacher:
   error_code: 404_000
   error_message: not found teacher
+not_found_student:
+  error_code: 404_001
+  error_message: not found student
 
 #:unprocessable_entity 422
 unprocessable_entity_result:

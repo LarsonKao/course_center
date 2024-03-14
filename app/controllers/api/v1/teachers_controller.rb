@@ -1,9 +1,9 @@
 module Api::V1
   class TeachersController < ApplicationController
-    before_action :set_current_teacher, only: [:update, :show, :destroy]
 
     def show
-      success_response(@teacher)
+      return error_response(:not_found_teacher) if current_teacher.nil?
+      success_response(current_teacher)
     end
 
     def create
@@ -22,25 +22,25 @@ module Api::V1
     end
 
     def update
-      @teacher.update(update_params)
-      return error_response(:unprocessable_entity_result, {error: @teacher.errors.full_messages.join(", ")}) if @teacher.errors.present?
+      return error_response(:not_found_teacher) if current_teacher.nil?
+      current_teacher.update(update_params)
+      return error_response(:unprocessable_entity_result, {error: current_teacher.errors.full_messages.join(", ")}) if current_teacher.errors.present?
 
       success_response
     end
 
     def destroy
-      @teacher.destroy
-      return error_response(:unprocessable_entity_result, {error: @teacher.errors.full_messages}) if @teacher.errors.present?
+      return error_response(:not_found_teacher) if current_teacher.nil?
+      current_teacher.destroy
+      return error_response(:unprocessable_entity_result, {error: current_teacher.errors.full_messages}) if current_teacher.errors.present?
 
       success_response
     end
 
     private
 
-    def set_current_teacher
-      @teacher = current_user.teacher
-      return head :not_found if @teacher.nil?
-      @teacher
+    def current_teacher
+      current_teacher = current_user.teacher
     end
 
     def create_params
