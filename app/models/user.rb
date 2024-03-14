@@ -7,7 +7,7 @@ class User < ApplicationRecord
   validates :email, format: URI::MailTo::EMAIL_REGEXP
 
   has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', foreign_key: :resource_owner_id, dependent: :destroy
-
+  has_one :teacher
   def self.authenticate(email, password)
     user = User.find_for_authentication(email: email)
     user&.valid_password?(password) ? user : nil

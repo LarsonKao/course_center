@@ -6,7 +6,7 @@ RSpec.describe User, type: :request do
 
   describe "GET show" do
     path = "/api/v1/users"
-    let(:user) { create(:teacher) }
+    let(:user) { create(:teachers) }
 
     context "when teacher is logged in" do
       let(:valid_token) { create(:access_token, resource_owner_id: user.id, application_id: client.id) }
