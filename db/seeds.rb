@@ -5,3 +5,17 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+if Doorkeeper::Application.count.zero?
+  Doorkeeper::Application.create(
+    name: 'student',
+    redirect_uri: '',
+    scopes: 'student'
+  )
+
+  Doorkeeper::Application.create(
+    name: 'teacher',
+    redirect_uri: '',
+    scopes: 'teacher'
+  )
+end

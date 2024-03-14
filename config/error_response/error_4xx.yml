@@ -1,0 +1,4 @@
+#:forbidden 403
+forbidden_client_id:
+  error_code: 403_000
+  error_message: invalid client id

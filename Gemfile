@@ -29,10 +29,15 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails', '~> 6.1.0'
+  gem 'factory_bot_rails'
   # pry debug tool
   gem 'pry', '~> 0.14.2'
   gem 'pry-byebug', '~> 3.10.1'
   gem 'pry-rails', '~> 0.3.9'
+end
+
+group :test do
+  gem 'database_cleaner'
 end
 
 group :development do
@@ -47,5 +52,10 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # For User Model
 gem "devise", "~> 4.9"
 
+# For Oauth2
+gem 'doorkeeper', "~> 5.6.9"
+
+# For response easier
+gem 'error_response'
 # For Read ENV File
 gem 'dotenv-rails'
