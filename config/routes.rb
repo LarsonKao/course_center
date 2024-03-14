@@ -6,6 +6,11 @@ Rails.application.routes.draw do
         collection do
         end
       end
+
+      resource :teachers, only: %i[create] do
+        collection do
+        end
+      end
     end
   end
 

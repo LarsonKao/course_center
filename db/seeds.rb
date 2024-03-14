@@ -8,14 +8,8 @@
 
 if Doorkeeper::Application.count.zero?
   Doorkeeper::Application.create(
-    name: 'student',
+    name: 'client',
     redirect_uri: '',
-    scopes: 'student'
-  )
-
-  Doorkeeper::Application.create(
-    name: 'teacher',
-    redirect_uri: '',
-    scopes: 'teacher'
+    scopes: ''
   )
 end

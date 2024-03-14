@@ -1,0 +1,3 @@
+source:
+  local:
+    - config/error_response/error_4xx.yml

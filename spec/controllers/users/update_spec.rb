@@ -2,11 +2,11 @@ require 'rails_helper'
 require 'helpers/headers_helper'
 RSpec.describe User, type: :request do
   let(:json_headers){HeadersHelper.get_json_headers}
-  let(:client) { create(:teacher_client) }
+  let(:client) { create(:client) }
 
   describe "PUT update" do
     path = "/api/v1/users"
-    let(:user) { create(:teachers) }
+    let(:user) { create(:users) }
 
     context "when teacher is logged in" do
       let(:valid_token) { create(:access_token, resource_owner_id: user.id, application_id: client.id) }

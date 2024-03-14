@@ -1,19 +1,7 @@
 FactoryBot.define do
-  factory :strudents , class: 'User' do
+  factory :users , class: 'User' do
     sequence(:email) { |n| "valid_#{n}@example.com"}
     password { "password" }
-    sequence(:name) { |n| "Student #{n}" }
-    permissions { ["student"] }
-  end
-
-  factory :teachers , class: 'User' do
-    sequence(:email) { |n| "valid_#{n}@example.com"}
-    password { "password" }
-    sequence(:name) { |n| "Teacher #{n}" }
-    permissions { ["teacher"] }
-
-    after(:create) do |user|
-      create(:teacher, user: user)
-    end
+    sequence(:name) { |n| "Man #{n}" }
   end
 end
