@@ -1,3 +1,8 @@
+#:bad_request 400
+existing_teacher:
+  error_code: 400_000
+  error_message: existing_teacher
+
 #:forbidden 403
 forbidden_client_id:
   error_code: 403_000
