@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :student do
-    user { nil }
+  factory :students, class: 'student' do
+    user { association :users }
   end
 end

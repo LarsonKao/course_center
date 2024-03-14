@@ -11,6 +11,11 @@ Rails.application.routes.draw do
         collection do
         end
       end
+
+      resource :students, only: %i[show create update destroy] do
+        collection do
+        end
+      end
     end
   end
 

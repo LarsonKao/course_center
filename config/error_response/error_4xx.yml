@@ -2,6 +2,9 @@
 existing_teacher:
   error_code: 400_000
   error_message: existing_teacher
+existing_student:
+  error_code: 400_001
+  error_message: existing_student
 
 #:forbidden 403
 forbidden_client_id:
