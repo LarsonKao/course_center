@@ -35,6 +35,12 @@ module Api::V1
 
     end
 
+    def destroy
+      return error_response(:unprocessable_entity_result, {error: current_user.errors.full_messages}) unless current_user.destroy
+
+      success_response
+    end
+
     private
 
     def create_params(permissions)
