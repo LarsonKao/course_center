@@ -35,8 +35,16 @@ module Api::V1
 
     end
 
+    def update
+      current_user.update(update_params)
+      return error_response(:unprocessable_entity_result, {error: current_user.errors.full_messages.join(", ")}) if current_user.errors.present?
+
+      success_response
+    end
+
     def destroy
-      return error_response(:unprocessable_entity_result, {error: current_user.errors.full_messages}) unless current_user.destroy
+      current_user.destroy
+      return error_response(:unprocessable_entity_result, {error: current_user.errors.full_messages}) if current_user.errors.present?
 
       success_response
     end
@@ -48,6 +56,10 @@ module Api::V1
       permitted_params = params.permit(require_params)
       permitted_params[:permissions] = permissions
       permitted_params
+    end
+
+    def update_params
+      params.permit(:name)
     end
 
     def generate_refresh_token
