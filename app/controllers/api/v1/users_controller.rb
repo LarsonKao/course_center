@@ -62,6 +62,10 @@ module Api::V1
       permitted_params
     end
 
+    def teacher_params
+      params.permit(:fab)
+    end
+
     def update_params
       params.permit(:name)
     end
