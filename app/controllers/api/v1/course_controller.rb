@@ -35,10 +35,9 @@ module Api::V1
 
     private
 
-    def set_current_course
-      @course = current_user.course
+    def permission_check
+      current_user.teacher
       return head :not_found if @course.nil?
-      @course
     end
 
     def create_params

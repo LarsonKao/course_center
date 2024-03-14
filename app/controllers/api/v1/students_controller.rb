@@ -1,8 +1,8 @@
 module Api::V1
   class StudentsController < ApplicationController
+    before_action :check_current_student!, only: [:show, :update, :destroy]
 
     def show
-      return error_response(:not_found_student) if current_student.nil?
       success_response(current_student)
     end
 
@@ -22,7 +22,6 @@ module Api::V1
     end
 
     def update
-      return error_response(:not_found_student) if current_student.nil?
       current_student.update(update_params)
       return error_response(:unprocessable_entity_result, {error: current_student.errors.full_messages.join(", ")}) if current_student.errors.present?
 
@@ -30,7 +29,6 @@ module Api::V1
     end
 
     def destroy
-      return error_response(:not_found_student) if current_student.nil?
       current_student.destroy
       return error_response(:unprocessable_entity_result, {error: current_student.errors.full_messages}) if current_student.errors.present?
 
@@ -39,8 +37,12 @@ module Api::V1
 
     private
 
+    def check_current_student!
+      error_response(:not_found_student) if current_student.nil?
+    end
+
     def current_student
-      current_student = current_user.student
+      @current_student = current_user.student
     end
 
     def create_params

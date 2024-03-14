@@ -1,8 +1,8 @@
 module Api::V1
   class TeachersController < ApplicationController
+    before_action :check_current_teacher!, only: [:update, :show, :destroy]
 
     def show
-      return error_response(:not_found_teacher) if current_teacher.nil?
       success_response(current_teacher)
     end
 
@@ -22,7 +22,6 @@ module Api::V1
     end
 
     def update
-      return error_response(:not_found_teacher) if current_teacher.nil?
       current_teacher.update(update_params)
       return error_response(:unprocessable_entity_result, {error: current_teacher.errors.full_messages.join(", ")}) if current_teacher.errors.present?
 
@@ -30,7 +29,6 @@ module Api::V1
     end
 
     def destroy
-      return error_response(:not_found_teacher) if current_teacher.nil?
       current_teacher.destroy
       return error_response(:unprocessable_entity_result, {error: current_teacher.errors.full_messages}) if current_teacher.errors.present?
 
@@ -38,6 +36,10 @@ module Api::V1
     end
 
     private
+
+    def check_current_teacher!
+      return error_response(:not_found_teacher) if current_teacher.nil?
+    end
 
     def current_teacher
       current_teacher = current_user.teacher
