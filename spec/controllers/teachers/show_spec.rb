@@ -5,7 +5,7 @@ RSpec.describe Teacher, type: :request do
   let(:client) { create(:client) }
 
   describe "GET show" do
-    path = "/api/v1/teachers"
+    path = "/api/v1/teacher"
     let(:teacher) { create(:teachers) }
     let(:user) { create(:users) }
 

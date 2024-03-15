@@ -1,11 +1,35 @@
 module Api::V1
   class CoursesController < ApplicationController
-    skip_before_action :doorkeeper_authorize!, only: [:show]
+    skip_before_action :doorkeeper_authorize!, only: [:show, :index]
     before_action :permission_check!, only: [:update, :create, :destroy]
     before_action :check_course!, only: [:update, :show, :destroy]
 
     def show
-      success_response(current_course)
+      result = {
+        course: current_course.attributes,
+        teachers: current_course.teachers.map do |t|
+          {
+            name: t.user.name,
+            lab: t.lab
+          }
+        end
+      }
+      success_response(result)
+    end
+
+    def index
+      result = Course.all.map do |c|
+        {
+          course: c.attributes,
+          teachers: c.teachers.map do |t|
+            {
+              name: t.user.name,
+              lab: t.lab
+            }
+          end
+        }
+      end
+      success_response(result)
     end
 
     def create
