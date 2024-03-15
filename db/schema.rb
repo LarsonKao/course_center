@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_15_033715) do
+ActiveRecord::Schema.define(version: 2024_03_15_133002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,12 +35,10 @@ ActiveRecord::Schema.define(version: 2024_03_15_033715) do
 
   create_table "courses", force: :cascade do |t|
     t.string "name", null: false
-    t.time "start_time", null: false
-    t.time "end_time", null: false
-    t.integer "days", default: [], array: true
     t.integer "credit", default: 1, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.jsonb "schedules", default: [], null: false
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
