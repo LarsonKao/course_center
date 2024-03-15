@@ -40,10 +40,4 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  use_doorkeeper do
-    skip_controllers :authorizations, :applications, :authorized_applications
-  end
-  devise_for :users
-
 end

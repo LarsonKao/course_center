@@ -15,19 +15,27 @@ RSpec.describe User, type: :request do
       }
     end
 
-    context "when all valid params" do
-      it "should create a new user" do
-        post(path, headers: json_headers, params: params.to_json)
+    it "should return http status code 200 when all right" do
+      result = post(path, headers: json_headers, params: params.to_json)
+      user = User.find_by(email: params[:email])
+      expect(result).to eq(200)
+      expect(user).to be_present
+    end
 
-        created_user = User.find_by(email: params[:email])
+    it "should return http status code 403 when client is invalid" do
+      params[:client_id] = "invalid_id"
+      result = post(path, headers: json_headers, params: params.to_json)
+      user = User.find_by(email: params[:email])
+      expect(result).to eq(403)
+      expect(user).to be_nil
+    end
 
-        expect(created_user.email).not_to eq(nil)
-      end
-
-      it "should return http status code 200" do
-        result = post(path, headers: json_headers, params: params.to_json)
-        expect(result).to eq(200)
-      end
+    it "should return http status code 422 when activerecord exception" do
+      allow_any_instance_of(User).to receive(:save).and_return(false)
+      result = post(path, headers: json_headers, params: params.to_json)
+      user = User.find_by(email: params[:email])
+      expect(result).to eq(422)
+      expect(user).to be_nil
     end
   end
 end
