@@ -13,6 +13,10 @@ Rails.application.routes.draw do
       end
 
       resource :students, only: %i[show create update destroy] do
+        collection do
+          post 'register_course', action: :register_course
+          delete 'unregister_course', action: :unregister_course
+        end
       end
 
       resource :courses, only: %i[show create update destroy] do
