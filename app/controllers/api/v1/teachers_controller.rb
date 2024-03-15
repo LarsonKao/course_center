@@ -1,6 +1,6 @@
 module Api::V1
   class TeachersController < ApplicationController
-    before_action :check_current_teacher!, only: [:update, :show, :destroy]
+    before_action :check_current_teacher!, except: [:create]
 
     def show
       success_response(current_teacher)
@@ -35,6 +35,22 @@ module Api::V1
       success_response
     end
 
+    def assign_course
+      course = Course.find_by(id: assign_course_params[:course_id])
+      return error_response(:not_found_course) if course.nil?
+      current_teacher.courses << course
+      success_response
+    end
+
+    def unassign_course
+      course = current_teacher.courses.find_by(id: unassign_course_params[:course_id])
+      return error_response(:not_found_course) if course.nil?
+
+      current_teacher.courses.delete(course)
+      success_response
+    end
+
+
     private
 
     def check_current_teacher!
@@ -42,7 +58,7 @@ module Api::V1
     end
 
     def current_teacher
-      current_teacher ||= current_user.teacher
+      @current_teacher ||= current_user.teacher
     end
 
     def create_params
@@ -51,6 +67,16 @@ module Api::V1
 
     def update_params
       params.permit(:lab)
+    end
+
+    def assign_course_params
+      params.require(:course_id)
+      params.permit(:course_id)
+    end
+
+    def unassign_course_params
+      params.require(:course_id)
+      params.permit(:course_id)
     end
   end
 end

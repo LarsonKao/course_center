@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
       resource :teachers, only: %i[show create update destroy] do
         collection do
+          post 'assign_course', action: :assign_course
+          delete 'unassign_course', action: :unassign_course
         end
       end
 
