@@ -1,6 +1,8 @@
 require 'rails_helper'
 require 'helpers/headers_helper'
+
 RSpec.describe User, type: :request do
+
   let(:json_headers){HeadersHelper.get_json_headers}
   let(:client) { create(:client) }
 
