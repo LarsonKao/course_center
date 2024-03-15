@@ -1,6 +1,17 @@
 module Api::V1
   class TeachersController < ApplicationController
-    before_action :check_current_teacher!, except: [:create]
+    skip_before_action :doorkeeper_authorize!, only: [:index, :course_list]
+    before_action :check_current_teacher!, except: [:create, :index, :course_list]
+
+    def index
+      result = Teacher.all.map do |t|
+        {
+          name: t.user.name,
+          lab: t.lab
+        }
+      end
+      success_response(result)
+    end
 
     def show
       success_response(current_teacher)
@@ -50,6 +61,12 @@ module Api::V1
       success_response
     end
 
+    def course_list
+      teacher = Teacher.find_by(id: course_list_params[:teacher_id])
+      return error_response(:not_found_teacher) if teacher.nil?
+      result = teacher.courses
+      success_response(result)
+    end
 
     private
 
@@ -77,6 +94,11 @@ module Api::V1
     def unassign_course_params
       params.require(:course_id)
       params.permit(:course_id)
+    end
+
+    def course_list_params
+      params.require(:teacher_id)
+      params.permit(:teacher_id)
     end
   end
 end
