@@ -17,5 +17,13 @@ RSpec.describe Course, type: :request do
         expect(result).to eq(200)
       end
     end
+
+    context "when teacher is not found" do
+      it "should return http status code 404" do
+        teacher.courses += courses
+        result = get(path + "?teacher_id=#{-5}", headers: json_headers)
+        expect(result).to eq(404)
+      end
+    end
   end
 end

@@ -26,6 +26,17 @@ RSpec.describe Course, type: :request do
       end
     end
 
+    context "when token is invalid" do
+      let(:teacher) { create(:teachers) }
+      let(:expired_token) { create(:expired_token, resource_owner_id: teacher.user.id, application_id: client.id) }
+
+      it "should return http status code 401" do
+        json_headers[:Authorization] = "Bearer #{expired_token.token}"
+        result = delete(path + "?id=#{course.id}", headers: json_headers)
+        expect(result).to eq(401)
+      end
+    end
+
     context "when user is not a teacher" do
       let(:user) {create(:users)}
       let(:valid_token) { create(:access_token, resource_owner_id: user.id, application_id: client.id) }
@@ -34,6 +45,18 @@ RSpec.describe Course, type: :request do
         json_headers[:Authorization] = "Bearer #{valid_token.token}"
         result = delete(path + "?id=#{course.id}", headers: json_headers)
         expect(result).to eq(404)
+      end
+    end
+
+    context "when destroy failed" do
+      let(:teacher) { create(:teachers) }
+      let(:valid_token) { create(:access_token, resource_owner_id: teacher.user.id, application_id: client.id) }
+
+      it "should return http status code 422" do
+        allow_any_instance_of(Course).to receive(:destroy).and_return(false)
+        json_headers[:Authorization] = "Bearer #{valid_token.token}"
+        result = delete(path + "?id=#{course.id}", headers: json_headers)
+        expect(result).to eq(422)
       end
     end
   end

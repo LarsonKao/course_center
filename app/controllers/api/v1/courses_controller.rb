@@ -68,9 +68,9 @@ module Api::V1
     end
 
     def destroy
-      current_course.destroy
-      return error_response(:unprocessable_entity_result, {error: current_course.errors.full_messages}) if current_course.errors.present?
-
+      unless current_course.destroy
+        return error_response(:unprocessable_entity_result, {error: current_course.errors.full_messages})
+      end
       success_response
     end
 

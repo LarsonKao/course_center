@@ -32,6 +32,20 @@ RSpec.describe Course, type: :request do
       end
     end
 
+    context "when token is invalid" do
+      let(:expired_token) { create(:expired_token, resource_owner_id: teacher.user.id, application_id: client.id) }
+      let(:params) do
+        {
+          course_id: course.id
+        }
+      end
+      it "should return http status code 401" do
+        json_headers[:Authorization] = "Bearer #{expired_token.token}"
+        result = post(path, headers: json_headers, params: params.to_json)
+        expect(result).to eq(401)
+      end
+    end
+
     context "when the course is not found" do
       let(:valid_token) { create(:access_token, resource_owner_id: teacher.user.id, application_id: client.id) }
 

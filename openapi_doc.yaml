@@ -988,6 +988,8 @@ paths:
                             - 0800-0850
                             - 0900-0950
                             - 1000-1050
+        '401':
+          description: token is invalid
         '404':
           description: not found object
           content:
