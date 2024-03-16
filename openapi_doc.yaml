@@ -877,12 +877,12 @@ paths:
             - invalid
       tags:
         - course
-  /api/v1/courses/course_list:
+  /api/v1/courses/assign_course_list:
     summary: Get The Course List From The Teacher
     get:
       summary: Get The Course List From The Teacher
       description: ''
-      operationId: 'course_listCourse'
+      operationId: 'assign_course_listCourse'
       parameters:
         - name: teacher_id
           in: query
@@ -899,26 +899,26 @@ paths:
                 ok:
                   value:
                     data:
-                      - id: 20
+                      - id: 1
                         name: Course Name
                         credit: 3
-                        created_at: '2024-03-15T19:07:29.153Z'
-                        updated_at: '2024-03-15T19:07:29.153Z'
+                        created_at: null
+                        updated_at: null
                         schedules:
-                          '1':
-                            - 1
-                            - 2
-                            - 3
-                      - id: 21
+                          Mon:
+                            - 0800-0850
+                            - 0900-0950
+                            - 1000-1050
+                      - id: 2
                         name: Course Name
                         credit: 3
-                        created_at: '2024-03-15T19:07:29.158Z'
-                        updated_at: '2024-03-15T19:07:29.158Z'
+                        created_at: null
+                        updated_at: null
                         schedules:
-                          '1':
-                            - 1
-                            - 2
-                            - 3
+                          Mon:
+                            - 0800-0850
+                            - 0900-0950
+                            - 1000-1050
         '404':
           description: not found object
           content:
@@ -929,6 +929,57 @@ paths:
                     error_code: 404000
                     error_message: not found teacher
                     error_key: not_found_teacher
+      tags:
+        - course
+  /api/v1/courses/register_course_list:
+    summary: Get The Course List From The Student
+    get:
+      summary: Get The Course List From The Student
+      description: ''
+      operationId: 'register_course_listCourse'
+      responses:
+        '200':
+          description: When all right
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data:
+                      - id: 12
+                        name: Course Name
+                        credit: 3
+                        created_at: null
+                        updated_at: null
+                        schedules:
+                          Mon:
+                            - 0800-0850
+                            - 0900-0950
+                            - 1000-1050
+                      - id: 13
+                        name: Course Name
+                        credit: 3
+                        created_at: null
+                        updated_at: null
+                        schedules:
+                          Mon:
+                            - 0800-0850
+                            - 0900-0950
+                            - 1000-1050
+        '404':
+          description: not found object
+          content:
+            application/json:
+              examples:
+                no_teacher:
+                  value:
+                    error_code: 404001
+                    error_message: not found student
+                    error_key: not_found_student
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
       tags:
         - course
   /api/v1/courses/register_course:
@@ -1294,5 +1345,5 @@ components:
         password:
           tokenUrl: /oauth/token
           scopes:
-            valid: the token is valid
+            valid: the token is valid # change to user own token
             invalid: the token is invalid

@@ -4,8 +4,8 @@ RSpec.describe Course, type: :request do
   let(:json_headers){HeadersHelper.get_json_headers}
   let(:client) { create(:client) }
 
-  describe "GET course_list" do
-    path = "/api/v1/courses/course_list"
+  describe "GET assign_course_list" do
+    path = "/api/v1/courses/assign_course_list"
     let(:teacher) { create(:teachers) }
     let(:courses) { create_list(:courses, 2)}
 

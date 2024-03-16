@@ -10,7 +10,6 @@ Rails.application.routes.draw do
       resource :teachers, only: %i[create update destroy] do
         collection do
           get '', action: :index
-          get 'course_list', action: :course_list
         end
       end
 
@@ -31,7 +30,8 @@ Rails.application.routes.draw do
           get '', action: :index
           post 'assign_course', action: :assign_course
           post 'unassign_course', action: :unassign_course
-          get 'course_list', action: :course_list
+          get 'assign_course_list', action: :assign_course_list
+          get 'register_course_list', action: :register_course_list
           get 'student_list', action: :student_list
           post 'register_course', action: :register_course
           post 'unregister_course', action: :unregister_course

@@ -1,6 +1,6 @@
 module Api::V1
   class CoursesController < ApplicationController
-    skip_before_action :doorkeeper_authorize!, only: [:show, :index, :course_list]
+    skip_before_action :doorkeeper_authorize!, only: [:show, :index, :assign_course_list]
     before_action :permission_check!, only: [:update, :create, :destroy]
     before_action :check_course!, only: [:update, :show, :destroy, :student_list]
     before_action :check_schedules_format!, only: [:create]
@@ -87,10 +87,17 @@ module Api::V1
       success_response
     end
 
-    def course_list
-      teacher = Teacher.find_by(id: course_list_params[:teacher_id])
+    def assign_course_list
+      teacher = Teacher.find_by(id: assign_course_list_params[:teacher_id])
       return error_response(:not_found_teacher) if teacher.nil?
-      result = teacher.courses
+      result = teacher.courses.map(&:readable)
+      success_response(result)
+    end
+
+    def register_course_list
+      student = current_user.student
+      return error_response(:not_found_student) if student.nil?
+      result = student.courses.map(&:readable)
       success_response(result)
     end
 
@@ -192,7 +199,7 @@ module Api::V1
       params.permit(:course_id)
     end
 
-    def course_list_params
+    def assign_course_list_params
       params.require(:teacher_id)
       params.permit(:teacher_id)
     end
