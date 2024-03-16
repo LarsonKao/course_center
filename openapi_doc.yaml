@@ -1207,6 +1207,7 @@ components:
         name:
           type: string
         schedules:
+          description: The key is meaning weekdays, and the value array is meaning the class slot.
           type: object
           example:
             '1':

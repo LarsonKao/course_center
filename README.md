@@ -2,6 +2,17 @@
 
 * Ruby version 3.2.2
 
+* Course Schedule Design
+  - [script](app/models/course.rb)
+  - schedule parameter struct : 
+  ```
+  {
+    weekday_num : [time_slot1, time_slot2, ...],
+    ...
+    ...
+  }
+  ```
+
 * Docker Usage
   1. cmd enter foler base
   2. run `docker-compose up -d`
