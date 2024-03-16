@@ -9,6 +9,7 @@ RSpec.describe Course, type: :request do
     let(:teacher) { create(:teachers) }
     let(:params) {{
       name: "Course Name",
+      description: "some description...",
       schedules: {
         "1": [1, 2, 3],
         "2": [4, 5, 6],

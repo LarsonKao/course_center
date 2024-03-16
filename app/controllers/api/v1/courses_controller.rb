@@ -11,6 +11,7 @@ module Api::V1
     def show
       result = {
         name: current_course.name,
+        description: current_course.description,
         credie: current_course.credit,
         schedules: current_course.readable.schedules,
         teachers: current_course.teachers.map do |t|
@@ -28,6 +29,7 @@ module Api::V1
         readable = c.readable
         {
           name: readable.name,
+          description: readable.description,
           credit: readable.credit,
           schedules: readable.schedules,
           teachers: c.teachers.map do |t|
@@ -150,7 +152,7 @@ module Api::V1
     end
 
     def create_params
-      params.permit(:name, :credit, schedules: {})
+      params.permit(:name, :description, :credit, schedules: {})
     end
 
     def check_schedules_format!
@@ -186,7 +188,7 @@ module Api::V1
     end
 
     def update_params
-      params.permit(:name, :credit, schedules: {})
+      params.permit(:name, :description, :credit, schedules: {})
     end
 
     def assign_course_params

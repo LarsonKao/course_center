@@ -565,6 +565,7 @@ paths:
                   value:
                     data:
                       - name: Course Name1
+                        description: some description...
                         credit: 3
                         schedules:
                           Mon:
@@ -575,6 +576,7 @@ paths:
                           - name: Man 10
                             lab: Lab 9
                       - name: Course Name2
+                        description: some description...
                         credit: 3
                         schedules:
                           Mon:
@@ -612,6 +614,7 @@ paths:
                     data:
                       id: 1
                       name: Course Name
+                      description: some description...
                       credit: 3
                       created_at: null
                       updated_at: null
@@ -778,6 +781,7 @@ paths:
                   value:
                     data:
                       name: Course Name
+                      description: some description...
                       credie: 3
                       schedules:
                         Mon:
@@ -901,6 +905,7 @@ paths:
                     data:
                       - id: 1
                         name: Course Name
+                        description: some description...
                         credit: 3
                         created_at: null
                         updated_at: null
@@ -911,6 +916,7 @@ paths:
                             - 1000-1050
                       - id: 2
                         name: Course Name
+                        description: some description...
                         credit: 3
                         created_at: null
                         updated_at: null
@@ -948,6 +954,7 @@ paths:
                     data:
                       - id: 12
                         name: Course Name
+                        description: some description...
                         credit: 3
                         created_at: null
                         updated_at: null
@@ -958,6 +965,7 @@ paths:
                             - 1000-1050
                       - id: 13
                         name: Course Name
+                        description: some description...
                         credit: 3
                         created_at: null
                         updated_at: null
@@ -1206,6 +1214,10 @@ components:
       properties:
         name:
           type: string
+          example: course name
+        description:
+          type: string
+          example: some description...
         schedules:
           description: The key is meaning weekdays, and the value array is meaning the class slot.
           type: object
@@ -1241,8 +1253,13 @@ components:
       properties:
         id:
           type: integer
+          example: 1
         name:
           type: string
+          example: course new name
+        description:
+          type: string
+          example: some description...
         schedules:
           type: object
           example:
