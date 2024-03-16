@@ -22,7 +22,7 @@
   5. run `docker exec -t course_center rails db:seed`
     db seed產生oauth2所需的test applications
   6. have fun.
-    參考[docment](openapi_doc.yaml)進行測試
+    參考[docment](openapi_doc.yaml)並使用[Swagger Editor](https://editor.swagger.io/)進行測試
   
 * Oauth2 Usage
   Test Application:
