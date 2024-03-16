@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_15_133002) do
+ActiveRecord::Schema.define(version: 2024_03_16_043738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 2024_03_15_133002) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.jsonb "schedules", default: [], null: false
+    t.index ["name"], name: "index_courses_on_name"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
@@ -88,6 +89,7 @@ ActiveRecord::Schema.define(version: 2024_03_15_133002) do
     t.string "status", default: "inactive", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["status"], name: "index_students_on_status"
     t.index ["user_id"], name: "index_students_on_user_id"
   end
 
@@ -96,6 +98,7 @@ ActiveRecord::Schema.define(version: 2024_03_15_133002) do
     t.string "lab"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["lab"], name: "index_teachers_on_lab"
     t.index ["user_id"], name: "index_teachers_on_user_id"
   end
 
@@ -109,6 +112,7 @@ ActiveRecord::Schema.define(version: 2024_03_15_133002) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["name"], name: "index_users_on_name"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
