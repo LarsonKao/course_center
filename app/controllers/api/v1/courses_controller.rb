@@ -1,6 +1,6 @@
 module Api::V1
   class CoursesController < ApplicationController
-    skip_before_action :doorkeeper_authorize!, only: [:show, :index]
+    skip_before_action :doorkeeper_authorize!, only: [:show, :index, :course_list]
     before_action :permission_check!, only: [:update, :create, :destroy]
     before_action :check_course!, only: [:update, :show, :destroy]
     before_action :check_schedules_format!, only: [:create]
@@ -10,7 +10,7 @@ module Api::V1
 
     def show
       result = {
-        course: current_course.attributes,
+        course: current_course.readable.attributes,
         teachers: current_course.teachers.map do |t|
           {
             name: t.user.name,
@@ -23,6 +23,7 @@ module Api::V1
 
     def index
       result = Course.all.map do |c|
+        c = c.readable
         {
           course: c.attributes,
           teachers: c.teachers.map do |t|
@@ -61,6 +62,50 @@ module Api::V1
       current_course.destroy
       return error_response(:unprocessable_entity_result, {error: current_course.errors.full_messages}) if current_course.errors.present?
 
+      success_response
+    end
+
+    def assign_course
+      current_teacher = current_user.teacher
+      return error_response(:not_found_teacher) if current_teacher.nil?
+      course = Course.find_by(id: assign_course_params[:course_id])
+      return error_response(:not_found_course) if course.nil?
+      current_teacher.courses << course
+      success_response
+    end
+
+    def unassign_course
+      current_teacher = current_user.teacher
+      return error_response(:not_found_teacher) if current_teacher.nil?
+      course = current_teacher.courses.find_by(id: unassign_course_params[:course_id])
+      return error_response(:not_found_course) if course.nil?
+      current_teacher.courses.delete(course)
+      success_response
+    end
+
+    def course_list
+      teacher = Teacher.find_by(id: course_list_params[:teacher_id])
+      return error_response(:not_found_teacher) if teacher.nil?
+      result = teacher.courses
+      success_response(result)
+    end
+
+    def register_course
+      current_student = current_user.student
+      return error_response(:not_found_student) if current_student.nil?
+      course = Course.find_by(id: register_course_params[:course_id])
+      return error_response(:not_found_course) if course.nil?
+      current_student.courses << course
+      success_response
+    end
+
+    def unregister_course
+      current_student = current_user.student
+      return error_response(:not_found_student) if current_student.nil?
+      course = current_student.courses.find_by(id: unregister_course_params[:course_id])
+      return error_response(:not_found_course) if course.nil?
+
+      current_student.courses.delete(course)
       success_response
     end
 
@@ -117,6 +162,31 @@ module Api::V1
 
     def update_params
       params.permit(:name, :credit, schedules: {})
+    end
+
+    def assign_course_params
+      params.require(:course_id)
+      params.permit(:course_id)
+    end
+
+    def unassign_course_params
+      params.require(:course_id)
+      params.permit(:course_id)
+    end
+
+    def course_list_params
+      params.require(:teacher_id)
+      params.permit(:teacher_id)
+    end
+
+    def register_course_params
+      params.require(:course_id)
+      params.permit(:course_id)
+    end
+
+    def unregister_course_params
+      params.require(:course_id)
+      params.permit(:course_id)
     end
   end
 end

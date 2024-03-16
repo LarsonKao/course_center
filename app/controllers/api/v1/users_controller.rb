@@ -52,8 +52,8 @@ module Api::V1
 
     def create_params
       require_params = [:email, :password, :name]
-      permitted_params = params.permit(require_params)
-      permitted_params
+      params.require(require_params)
+      params.permit(require_params)
     end
 
     def update_params

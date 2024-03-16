@@ -13,14 +13,14 @@ RSpec.describe Course, type: :request do
 
       it "should return http status code 200" do
         json_headers[:Authorization] = "Bearer #{valid_token.token}"
-        result = delete(path, headers: json_headers, params: params.to_json)
+        result = delete(path + "?id=#{course.id}", headers: json_headers)
         expect(result).to eq(200)
       end
 
       it "should delete the course" do
         json_headers[:Authorization] = "Bearer #{valid_token.token}"
         id = course.id
-        delete(path, headers: json_headers, params: params.to_json)
+        delete(path + "?id=#{course.id}", headers: json_headers)
         result = Course.find_by(id: id)
         expect(result).to be_nil
       end
@@ -32,7 +32,7 @@ RSpec.describe Course, type: :request do
 
       it "should return http status code 403" do
         json_headers[:Authorization] = "Bearer #{valid_token.token}"
-        result = delete(path, headers: json_headers, params: params.to_json)
+        result = delete(path + "?id=#{course.id}", headers: json_headers)
         expect(result).to eq(403)
       end
     end

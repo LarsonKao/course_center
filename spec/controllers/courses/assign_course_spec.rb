@@ -1,11 +1,11 @@
 require 'rails_helper'
 require 'helpers/headers_helper'
-RSpec.describe Teacher, type: :request do
+RSpec.describe Course, type: :request do
   let(:json_headers){HeadersHelper.get_json_headers}
   let(:client) { create(:client) }
 
   describe "POST assign_course" do
-    path = "/api/v1/teachers/assign_course"
+    path = "/api/v1/courses/assign_course"
     let(:teacher) { create(:teachers) }
     let(:course) { create(:courses)}
     let(:user) { create(:users) }

@@ -1,13 +1,13 @@
 require 'rails_helper'
 require 'helpers/headers_helper'
-RSpec.describe Teacher, type: :request do
+RSpec.describe Course, type: :request do
   let(:json_headers){HeadersHelper.get_json_headers}
   let(:client) { create(:client) }
 
   describe "GET course_list" do
-    path = "/api/v1/teachers/course_list"
+    path = "/api/v1/courses/course_list"
     let(:teacher) { create(:teachers) }
-    let(:courses) { create_list(:courses, 5)}
+    let(:courses) { create_list(:courses, 2)}
 
 
     context "when server is ok" do

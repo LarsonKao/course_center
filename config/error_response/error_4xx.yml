@@ -8,6 +8,9 @@ existing_student:
 invalid_format:
   error_code: 400_002
   error_message: invalid params format
+invalid_params:
+  error_code: 400_003
+  error_message: invalid_params
 
 #:forbidden 403
 forbidden_client_id:

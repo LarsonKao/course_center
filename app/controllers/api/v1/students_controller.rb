@@ -1,6 +1,17 @@
 module Api::V1
   class StudentsController < ApplicationController
-    before_action :check_current_student!, except: [:create]
+    before_action :check_current_student!, except: [:create, :index]
+    skip_before_action :doorkeeper_authorize!, only: [:index]
+
+    def index
+      result = Student.all.map do |t|
+        {
+          name: t.user.name,
+          status: t.status
+        }
+      end
+      success_response(result)
+    end
 
     def show
       success_response(current_student)
@@ -35,21 +46,6 @@ module Api::V1
       success_response
     end
 
-    def register_course
-      course = Course.find_by(id: register_course_params[:course_id])
-      return error_response(:not_found_course) if course.nil?
-      current_student.courses << course
-      success_response
-    end
-
-    def unregister_course
-      course = current_student.courses.find_by(id: unregister_course_params[:course_id])
-      return error_response(:not_found_course) if course.nil?
-
-      current_student.courses.delete(course)
-      success_response
-    end
-
     private
 
     def check_current_student!
@@ -66,16 +62,6 @@ module Api::V1
 
     def update_params
       params.permit(:status)
-    end
-
-    def register_course_params
-      params.require(:course_id)
-      params.permit(:course_id)
-    end
-
-    def unregister_course_params
-      params.require(:course_id)
-      params.permit(:course_id)
     end
   end
 end
