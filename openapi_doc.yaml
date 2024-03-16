@@ -1264,6 +1264,7 @@ components:
               - 6
         credit:
           type: integer
+          example: 3
     update_course:
       type: object
       properties:
@@ -1305,6 +1306,7 @@ components:
               - 6
         credit:
           type: integer
+          example: 2
     assign_course:
       type: object
       properties:
