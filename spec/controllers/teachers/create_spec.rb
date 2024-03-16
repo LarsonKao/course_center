@@ -45,5 +45,14 @@ RSpec.describe Teacher, type: :request do
         expect(result).to eq(400)
       end
     end
+
+    context "when create failed" do
+      it "should return http status code 422" do
+        allow_any_instance_of(User).to receive(:save).and_return(false)
+        json_headers[:Authorization] = "Bearer #{valid_token.token}"
+        result = post(path, headers: json_headers, params: params.to_json)
+        expect(result).to eq(422)
+      end
+    end
   end
 end

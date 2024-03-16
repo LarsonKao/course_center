@@ -29,7 +29,7 @@ module Api::V1
       return error_response(:existing_student) if current_user.student.present?
       student = Student.new(create_params)
       current_user.student = student
-      if student.save && current_user.save
+      if current_user.save
         success_response(student)
       else
         error_response(:unprocessable_entity_result,
@@ -41,16 +41,16 @@ module Api::V1
     end
 
     def update
-      current_student.update(update_params)
-      return error_response(:unprocessable_entity_result, {error: current_student.errors.full_messages.join(", ")}) if current_student.errors.present?
-
+      unless current_student.update(update_params)
+        return error_response(:unprocessable_entity_result, {error: current_student.errors.full_messages.join(", ")})
+      end
       success_response
     end
 
     def destroy
-      current_student.destroy
-      return error_response(:unprocessable_entity_result, {error: current_student.errors.full_messages}) if current_student.errors.present?
-
+      unless current_student.destroy
+        return error_response(:unprocessable_entity_result, {error: current_student.errors.full_messages})
+      end
       success_response
     end
 

@@ -20,6 +20,17 @@ RSpec.describe Student, type: :request do
       end
     end
 
+    context "when token is invalid" do
+      let(:valid_token) { create(:access_token, resource_owner_id: student.user.id, application_id: client.id) }
+      let(:expired_token) { create(:expired_token, resource_owner_id: student.user.id, application_id: client.id) }
+
+      it "should return http status code 401" do
+        json_headers[:Authorization] = "Bearer #{expired_token.token}"
+        result = get(path, headers: json_headers)
+        expect(result).to eq(401)
+      end
+    end
+
     context "when user has no student" do
       let(:valid_token) { create(:access_token, resource_owner_id: user.id, application_id: client.id) }
       let(:expired_token) { create(:expired_token, resource_owner_id: user.id, application_id: client.id) }

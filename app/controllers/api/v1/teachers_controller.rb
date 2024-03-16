@@ -29,7 +29,7 @@ module Api::V1
       return error_response(:existing_teacher) if current_user.teacher.present?
       teacher = Teacher.new(create_params)
       current_user.teacher = teacher
-      if teacher.save && current_user.save
+      if current_user.save
         success_response(teacher)
       else
         error_response(:unprocessable_entity_result,
