@@ -7,6 +7,7 @@ module Api::V1
       result = Student.all.map do |t|
         {
           name: t.user.name,
+          email: t.user.email,
           status: t.status
         }
       end
@@ -14,7 +15,12 @@ module Api::V1
     end
 
     def show
-      success_response(current_student)
+      result = {
+        name: current_student.user.name,
+        email: current_student.user.email,
+        status: current_student.status
+      }
+      success_response(result)
     end
 
     def create

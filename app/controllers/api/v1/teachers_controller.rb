@@ -7,6 +7,7 @@ module Api::V1
       result = Teacher.all.map do |t|
         {
           name: t.user.name,
+          email: t.user.email,
           lab: t.lab
         }
       end
@@ -14,7 +15,12 @@ module Api::V1
     end
 
     def show
-      success_response(current_teacher)
+      result = {
+        name: current_teacher.user.name,
+        email: current_teacher.user.email,
+        lab: current_teacher.lab
+      }
+      success_response(result)
     end
 
     def create

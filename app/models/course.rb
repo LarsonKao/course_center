@@ -29,6 +29,7 @@ class Course < ApplicationRecord
 
   def readable
     dup = self.dup
+    dup[:id] = id
     readable_sche = {}
     schedules.each do |day, slots|
       readable_sche[WEEKDAYS[day.to_i]] = slots.map { |slot| TIME_SLOTS[slot.to_i] }

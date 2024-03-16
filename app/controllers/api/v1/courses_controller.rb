@@ -23,9 +23,11 @@ module Api::V1
 
     def index
       result = Course.all.map do |c|
-        c = c.readable
+        readable = c.readable
         {
-          course: c.attributes,
+          name: readable.name,
+          credit: readable.credit,
+          schedules: readable.schedules,
           teachers: c.teachers.map do |t|
             {
               name: t.user.name,
