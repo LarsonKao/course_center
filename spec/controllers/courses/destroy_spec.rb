@@ -30,10 +30,10 @@ RSpec.describe Course, type: :request do
       let(:user) {create(:users)}
       let(:valid_token) { create(:access_token, resource_owner_id: user.id, application_id: client.id) }
 
-      it "should return http status code 403" do
+      it "should return http status code 404" do
         json_headers[:Authorization] = "Bearer #{valid_token.token}"
         result = delete(path + "?id=#{course.id}", headers: json_headers)
-        expect(result).to eq(403)
+        expect(result).to eq(404)
       end
     end
   end

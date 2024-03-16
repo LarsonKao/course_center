@@ -3,7 +3,6 @@ module Api::V1
     skip_before_action :doorkeeper_authorize!, only: [:show, :index, :assign_course_list]
     before_action :permission_check!, only: [:update, :create, :destroy]
     before_action :check_course!, only: [:update, :show, :destroy, :student_list]
-    before_action :check_schedules_format!, only: [:create]
 
     VALID_KEYS = [1, 2, 3, 4, 5, 6, 7].freeze
     VALID_VALUES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].freeze
@@ -44,6 +43,8 @@ module Api::V1
     end
 
     def create
+      return error_response(:invalid_format) unless params[:schedules].present? && check_schedules_format
+
       course = Course.new(create_params)
 
       if course.save
@@ -58,9 +59,11 @@ module Api::V1
     end
 
     def update
-      current_course.update(update_params)
-      return error_response(:unprocessable_entity_result, {error: current_course.errors.full_messages.join(", ")}) if current_course.errors.present?
+      return error_response(:invalid_format) if params[:schedules].present? && !check_schedules_format
 
+      unless current_course.update(update_params)
+        return error_response(:unprocessable_entity_result, {error: current_course.errors.full_messages.join(", ")})
+      end
       success_response
     end
 
@@ -139,7 +142,7 @@ module Api::V1
     private
 
     def permission_check!
-      error_response(:create_course_forbidden) if current_user.teacher.nil?
+      error_response(:not_found_teacher) if current_user.teacher.nil?
     end
 
     def check_course!
@@ -152,39 +155,40 @@ module Api::V1
     end
 
     def create_params
+      require =[:name, :description, :credit]
+      params.require(require)
       params.permit(:name, :description, :credit, schedules: {})
     end
 
-    def check_schedules_format!
-      params.require(:schedules)
+    def check_schedules_format
 
-      schedules = params[:schedules].permit!
       # 檢查是否為 Hash
-      unless schedules.is_a?(Hash)
-        begin
-          schedules = schedules.to_hash
-        rescue
-          return error_response(:invalid_format)
+      begin
+        schedules = params[:schedules].permit!
+        unless schedules.is_a?(Hash)
+            schedules = schedules.to_hash
         end
+      rescue
+          return false
       end
-
 
       # 檢查 key 是否符合格式
       unless schedules.keys.all? { |key| VALID_KEYS.include?(key.to_i) }
-        return error_response(:invalid_format)
+        return false
       end
 
       # 檢查 value 是否符合格式
       unless schedules.values.flatten.all? { |value| VALID_VALUES.include?(value.to_i) }
-        return error_response(:invalid_format)
+        return false
       end
 
       # 檢查是否有重複的 value
       schedules.each do |key, value|
         unless value.uniq.size == value.size
-          return error_response(:invalid_format)
+          return false
         end
       end
+      true
     end
 
     def update_params

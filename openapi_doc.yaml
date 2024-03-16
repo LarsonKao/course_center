@@ -647,6 +647,18 @@ paths:
                           - 1300-1350
         '400':
           description: Bad Request
+        '401':
+          description: token is invalid
+        '404':
+          description: User Has No Teacher Auth
+          content:
+            application/json:
+              examples:
+                '404':
+                  value:
+                    error_code: 404000
+                    error_message: not found course
+                    error_key: not_found_course
         '422':
           description: raise error when saving record
           content:

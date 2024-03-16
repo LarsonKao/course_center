@@ -4,6 +4,8 @@ class Course < ApplicationRecord
   has_many :course_registrations, dependent: :destroy
   has_many :students, through: :course_registrations
 
+  validates :credit, numericality: { greater_than: 0 }
+
   WEEKDAYS = {
     1 => 'Mon',
     2 => 'Tue',
