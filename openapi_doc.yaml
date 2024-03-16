@@ -755,6 +755,40 @@ paths:
             - invalid
       tags:
         - course
+  /api/v1/course:
+    summary: Courses Actions
+    get:
+      summary: Get The Course Info
+      description: ''
+      operationId: 'showCourse'
+      parameters:
+        - name: id
+          in: query
+          description: course id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: When all right
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data:
+                      name: Course Name
+                      credie: 3
+                      schedules:
+                        Mon:
+                          - 0800-0850
+                          - 0900-0950
+                          - 1000-1050
+                      teachers:
+                        - name: Man 15
+                          lab: Lab 11
+      tags:
+        - course
   /api/v1/courses/assign_course:
     summary: Assign A Course To Teacher
     post:

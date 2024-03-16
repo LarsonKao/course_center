@@ -38,7 +38,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :courses, only: %i[show] do
+      resource :course, only: %i[show] do
       end
     end
   end

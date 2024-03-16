@@ -17,7 +17,6 @@ RSpec.describe Teacher, type: :request do
       it "should return http status code 200" do
         json_headers[:Authorization] = "Bearer #{valid_token.token}"
         result = get(path, headers: json_headers)
-        binding.pry
         expect(result).to eq(200)
       end
     end

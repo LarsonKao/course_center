@@ -5,11 +5,12 @@ RSpec.describe Course, type: :request do
   let(:client) { create(:client) }
 
   describe "GET show" do
-    path = "/api/v1/courses"
+    path = "/api/v1/course"
     let(:course) { create(:courses) }
     let(:teacher) { create(:teachers)}
     context "when user is logged in" do
       it "should return http status code 200" do
+        course.teachers << teacher
         result = get(path + "?id=#{course.id}", headers: json_headers)
         expect(result).to eq(200)
       end

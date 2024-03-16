@@ -10,7 +10,9 @@ module Api::V1
 
     def show
       result = {
-        course: current_course.readable.attributes,
+        name: current_course.name,
+        credie: current_course.credit,
+        schedules: current_course.readable.schedules,
         teachers: current_course.teachers.map do |t|
           {
             name: t.user.name,
