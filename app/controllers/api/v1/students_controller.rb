@@ -16,6 +16,8 @@ module Api::V1
 
     def show
       result = {
+        user_id: current_student.user.id,
+        student_id: current_student.id,
         name: current_student.user.name,
         email: current_student.user.email,
         status: current_student.status

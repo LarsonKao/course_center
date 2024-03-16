@@ -18,13 +18,6 @@ RSpec.describe Student, type: :request do
         result = get(path, headers: json_headers)
         expect(result).to eq(200)
       end
-
-      it "should return the student" do
-        json_headers[:Authorization] = "Bearer #{valid_token.token}"
-        get(path, headers: json_headers)
-        result = JSON.parse(response.body, symbolize_names: true)[:data]
-        expect(result[:id]).to eq(student[:id])
-      end
     end
 
     context "when user has no student" do

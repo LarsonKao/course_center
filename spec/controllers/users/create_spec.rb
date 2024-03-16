@@ -6,7 +6,7 @@ RSpec.describe User, type: :request do
   let(:json_headers){HeadersHelper.get_json_headers}
   let(:client) { create(:client) }
 
-  describe "POST create teacher" do
+  describe "POST create user" do
     path = "/api/v1/users"
     let(:params) do
       {

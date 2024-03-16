@@ -42,4 +42,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  #doorkeeper
+  post '/login', to: 'doorkeeper/tokens#create'
+  post '/logout', to: 'doorkeeper/tokens#revoke'
 end
