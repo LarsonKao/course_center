@@ -35,15 +35,17 @@ module Api::V1
     end
 
     def update
-      current_user.update(update_params)
-      return error_response(:unprocessable_entity_result, {error: current_user.errors.full_messages.join(", ")}) if current_user.errors.present?
+      unless current_user.update(update_params)
+        return error_response(:unprocessable_entity_result, {error: current_user.errors.full_messages.join(", ")})
+      end
 
       success_response
     end
 
     def destroy
-      current_user.destroy
-      return error_response(:unprocessable_entity_result, {error: current_user.errors.full_messages}) if current_user.errors.present?
+      unless current_user.destroy
+        return error_response(:unprocessable_entity_result, {error: current_user.errors.full_messages})
+      end
 
       success_response
     end
@@ -57,6 +59,7 @@ module Api::V1
     end
 
     def update_params
+      params.require(:name)
       params.permit(:name)
     end
 

@@ -24,12 +24,26 @@ RSpec.describe User, type: :request do
         expect(user.name).to eq(params[:name])
       end
 
+      it "should return http status code 400 when params are missing" do
+        json_headers[:Authorization] = "Bearer #{valid_token.token}"
+        result = patch(path, headers: json_headers)
+        user.reload
+        expect(result).to eq(400)
+      end
+
       it "should return http status code 401 when token is invalid" do
         json_headers[:Authorization] = "Bearer #{expired_token.token}"
         result = patch(path, headers: json_headers, params: params.to_json)
         user.reload
         expect(result).to eq(401)
         expect(user.name).not_to eq(params[:name])
+      end
+
+      it "should return http status code 422 when save failed" do
+        allow_any_instance_of(User).to receive(:update).and_return(false)
+        json_headers[:Authorization] = "Bearer #{valid_token.token}"
+        result = patch(path, headers: json_headers, params: params.to_json)
+        expect(result).to eq(422)
       end
     end
   end

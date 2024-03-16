@@ -9,10 +9,10 @@ RSpec.describe Teacher, type: :request do
     let(:user) { create(:users) }
     let(:teacher) { create(:teachers)}
     let(:params) {{ lab: "LAB202" }}
-    context "when user has no teacher" do
-      let(:valid_token) { create(:access_token, resource_owner_id: user.id, application_id: client.id) }
-      let(:expired_token) { create(:expired_token, resource_owner_id: user.id, application_id: client.id) }
+    let(:valid_token) { create(:access_token, resource_owner_id: user.id, application_id: client.id) }
+    let(:expired_token) { create(:expired_token, resource_owner_id: user.id, application_id: client.id) }
 
+    context "when user has no teacher" do
       it "should return http status code 200" do
         json_headers[:Authorization] = "Bearer #{valid_token.token}"
         result = post(path, headers: json_headers, params: params.to_json)
@@ -33,6 +33,15 @@ RSpec.describe Teacher, type: :request do
       it "should return 404" do
         json_headers[:Authorization] = "Bearer #{valid_token.token}"
         result = post(path, headers: json_headers, params: params.to_json)
+        expect(result).to eq(400)
+      end
+    end
+
+    context "when user already has a teacher auth" do
+      it "should return http status code 400" do
+        user.teacher = teacher
+        json_headers[:Authorization] = "Bearer #{valid_token.token}"
+        result = post(path, headers: json_headers)
         expect(result).to eq(400)
       end
     end

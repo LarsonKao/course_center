@@ -31,6 +31,30 @@ RSpec.describe Teacher, type: :request do
       end
     end
 
+    context "when params are bad" do
+      let(:valid_token) { create(:access_token, resource_owner_id: teacher.user.id, application_id: client.id) }
+
+      it "should return http status code 400" do
+        json_headers[:Authorization] = "Bearer #{valid_token.token}"
+        result = patch(path, headers: json_headers)
+        expect(result).to eq(400)
+      end
+    end
+
+    context "when token is bad" do
+      let(:invalid_token) { create(:expired_token, resource_owner_id: teacher.user.id, application_id: client.id) }
+      let(:params) do
+        {
+          lab: 'NEW FAB'
+        }
+      end
+      it "should return http status code 401" do
+        json_headers[:Authorization] = "Bearer #{invalid_token.token}"
+        result = patch(path, headers: json_headers, params: params.to_json)
+        expect(result).to eq(401)
+      end
+    end
+
     context "when user has no teacher" do
       let(:valid_token) { create(:access_token, resource_owner_id: user.id, application_id: client.id) }
 

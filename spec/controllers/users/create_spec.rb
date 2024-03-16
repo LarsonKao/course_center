@@ -24,6 +24,12 @@ RSpec.describe User, type: :request do
       expect(user).to be_present
     end
 
+    it "should return http status code 400 when params is bad" do
+      params[:password] = nil
+      post(path, headers: json_headers, params: params.to_json)
+      expect(response).to have_http_status(400)
+    end
+
     it "should return http status code 403 when client is invalid" do
       params[:client_id] = "invalid_id"
       result = post(path, headers: json_headers, params: params.to_json)

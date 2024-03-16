@@ -69,6 +69,7 @@ module Api::V1
     end
 
     def update_params
+      params.require(:lab)
       params.permit(:lab)
     end
   end
