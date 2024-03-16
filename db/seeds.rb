@@ -8,8 +8,10 @@
 
 if Doorkeeper::Application.count.zero?
   Doorkeeper::Application.create(
-    name: 'client',
+    name: 'test_client',
     redirect_uri: '',
-    scopes: ''
+    scopes: '',
+    uid: '11rD_NPUo9D15hrTuFfgege3iAabZn9gfgnBlEw2',
+    secret: 'tSeKtHSQ5x3JJgE57QNHrAjL2Tcy0UdjitxLi33ITQA'
   )
 end

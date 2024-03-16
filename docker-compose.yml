@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: course_center
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bin/rails server --port 3000 --binding 0.0.0.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/course_center
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db/course_center
+    links:
+      - db
+
+  db:
+    image: postgres:14
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_DB: course_center
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  db_data:

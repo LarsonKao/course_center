@@ -1,0 +1,1264 @@
+openapi: 3.0.3
+servers:
+  - url: https://localhost:3000
+    variables: {}
+info:
+  title: Course Center
+  version: v1
+paths:
+  /api/v1/users:
+    summary: User Actions
+    post:
+      summary: Create User
+      description: ''
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/create_user'
+      responses:
+        '200':
+          description: Should Return User Info With Access Token
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data:
+                      id: 54
+                      email: test@example.com
+                      access_token: ruuXzYUG3E850wyt3VonaaLpSioZ3JQX1Qam4rJ7bbM
+                      token_type: bearer
+                      name: John Doe
+        '400':
+          description: params bad
+        '403':
+          description: client_id is invalid
+          content:
+            application/json:
+              examples:
+                '403':
+                  value:
+                    error_code: 403000
+                    error_message: invalid client id
+                    error_key: forbidden_client_id
+        '422':
+          description: raise error when saving record
+          content:
+            application/json:
+              examples:
+                '422':
+                  value:
+                    error_code: 422000
+                    error_message: 'unprocessable entity: {:error=>[]}'
+                    error_key: unprocessable_entity_result
+      tags:
+        - user
+    get:
+      summary: Get Current User Info
+      description: ''
+      operationId: 'getUser'
+      responses:
+        '200':
+          description: Shoud Return User Info
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data:
+                      id: 58
+                      name: Man 57
+                      email: valid_57@example.com
+                      created_at: '2024-03-15T16:45:57.961Z'
+                      updated_at: '2024-03-15T16:45:57.961Z'
+        '401':
+          description: no token or invalid token
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - user
+    patch:
+      summary: Update Current User Info
+      description: ''
+      operationId: 'updateUser'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/update_user'
+      responses:
+        '200':
+          description: Return Nothing
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data: {}
+        '400':
+          description: params are not enough
+        '401':
+          description: no token or invalid token
+        '422':
+          description: raise error when updating record
+          content:
+            application/json:
+              examples:
+                '422':
+                  value:
+                    error_code: 422000
+                    error_message: 'unprocessable entity: {:error=>[]}'
+                    error_key: unprocessable_entity_result
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - user
+    delete:
+      summary: Delete Current User
+      description: ''
+      operationId: 'deleteUser'
+      responses:
+        '200':
+          description: Delete User And All dependent Object On It
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data: {}
+        '401':
+          description: no token or invalid token
+        '422':
+          description: raise error when delete record
+          content:
+            application/json:
+              examples:
+                '422':
+                  value:
+                    error_code: 422000
+                    error_message: 'unprocessable entity: {:error=>[]}'
+                    error_key: unprocessable_entity_result
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - user
+  /api/v1/teachers:
+    summary: Teacher Actions
+    get:
+      summary: Get All Teacher Infos, Dont Need Auth
+      description: ''
+      operationId: 'indexTeacher'
+      responses:
+        '200':
+          description: Return Teacher Name And Lab And Email
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data:
+                      - name: Man 48
+                        email: valid_48@example.com
+                        lab: Lab 22
+                      - name: Man 49
+                        email: valid_49@example.com
+                        lab: Lab 23
+      tags:
+        - teacher
+    post:
+      summary: Create Teacher
+      description: ''
+      operationId: createTeacher
+      requestBody:
+        required: false
+        description: The Lab Parameter Is Not Essential
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/create_teacher'
+      responses:
+        '200':
+          description: Return Teacher Info
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data:
+                      id: 15
+                      user_id: 34
+                      lab: LAB202
+                      created_at: '2024-03-15T17:32:26.439Z'
+                      updated_at: '2024-03-15T17:32:26.439Z'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                '400':
+                  value:
+                    error_code: 400000
+                    error_message: existing_teacher
+                    error_key: existing_teacher
+        '422':
+          description: raise error when saving record
+          content:
+            application/json:
+              examples:
+                '422':
+                  value:
+                    error_code: 422000
+                    error_message: 'unprocessable entity: {:error=>[]}'
+                    error_key: unprocessable_entity_result
+      tags:
+        - teacher
+    patch:
+      summary: Update Current Teacher Info
+      description: ''
+      operationId: 'updateTeacher'
+      requestBody:
+        required: true
+        description: At Least One Attribute Parameter
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/update_teacher'
+      responses:
+        '200':
+          description: When all right
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data: {}
+        '400':
+          description: params are not enough
+        '401':
+          description: no token or invalid token
+        '404':
+          description: User Has No Teacher Auth
+          content:
+            application/json:
+              examples:
+                '404':
+                  value:
+                    error_code: 404000
+                    error_message: not found teacher
+                    error_key: not_found_teacher
+        '422':
+          description: raise error when updating record
+          content:
+            application/json:
+              examples:
+                '422':
+                  value:
+                    error_code: 422000
+                    error_message: 'unprocessable entity: {:error=>[]}'
+                    error_key: unprocessable_entity_result
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - teacher
+    delete:
+      summary: Delete Current Teacher Info
+      description: ''
+      operationId: 'destroyTeacher'
+      responses:
+        '200':
+          description: Delete Successd
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data: {}
+        '401':
+          description: no token or invalid token
+        '404':
+          description: User Has No Teacher Auth
+          content:
+            application/json:
+              examples:
+                '404':
+                  value:
+                    error_code: 404000
+                    error_message: not found teacher
+                    error_key: not_found_teacher
+        '422':
+          description: raise error when updating record
+          content:
+            application/json:
+              examples:
+                '422':
+                  value:
+                    error_code: 422000
+                    error_message: 'unprocessable entity: {:error=>[]}'
+                    error_key: unprocessable_entity_result
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - teacher
+  /api/v1/teacher:
+    summary: Teacher Actions
+    get:
+      summary: Get Current Teacher Info
+      description: ''
+      operationId: 'getTeacher'
+      responses:
+        '200':
+          description: Return Current Teacher Info
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data:
+                      user_id: 49
+                      teacher_id: 26
+                      name: Man 49
+                      email: valid_49@example.com
+                      lab: Lab 24
+        '401':
+          description: token is invalid
+        '404':
+          description: This User Has No Teacher Auth
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    error_code: 404000
+                    error_message: not found teacher
+                    error_key: not_found_teacher
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - teacher
+  /api/v1/students:
+    summary: Students Actions
+    get:
+      summary: Get All Students Infos
+      description: 'No Auth'
+      operationId: 'indexStudent'
+      responses:
+        '200':
+          description: When all right
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data:
+                      - name: Man 34
+                        email: valid_34@example.com
+                        status: inactive
+                      - name: Man 35
+                        email: valid_35@example.com
+                        status: inactive
+      tags:
+        - student
+    post:
+      summary: Create Student
+      description: ''
+      operationId: 'createStudent'
+      requestBody:
+        required: false
+        description: The Status Is Inactive For Default
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/create_student'
+      responses:
+        '200':
+          description: Return Student Info
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data:
+                      id: 1
+                      user_id: 12
+                      status: inactive
+                      created_at: '2024-03-15T19:16:38.540Z'
+                      updated_at: '2024-03-15T19:16:38.540Z'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                '400':
+                  value:
+                    error_code: 400000
+                    error_message: existing_student
+                    error_key: existing_student
+        '422':
+          description: raise error when saving record
+          content:
+            application/json:
+              examples:
+                '422':
+                  value:
+                    error_code: 422000
+                    error_message: 'unprocessable entity: {:error=>[]}'
+                    error_key: unprocessable_entity_result
+      tags:
+        - student
+    patch:
+      summary: Update Current Student Info
+      description: ''
+      operationId: 'updateStudent'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/update_student'
+      responses:
+        '200':
+          description: When all right
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data: {}
+        '400':
+          description: params are not enough
+        '401':
+          description: no token or invalid token
+        '404':
+          description: User Has No Student Auth
+          content:
+            application/json:
+              examples:
+                '404':
+                  value:
+                    error_code: 404000
+                    error_message: not found student
+                    error_key: not_found_student
+        '422':
+          description: raise error when updating record
+          content:
+            application/json:
+              examples:
+                '422':
+                  value:
+                    error_code: 422000
+                    error_message: 'unprocessable entity: {:error=>[]}'
+                    error_key: unprocessable_entity_result
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - student
+    delete:
+      summary: Delete Current Student Info
+      description: ''
+      operationId: 'destroyStudent'
+      responses:
+        '200':
+          description: Delete Successd
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data: {}
+        '401':
+          description: no token or invalid token
+        '404':
+          description: User Has No Student Auth
+          content:
+            application/json:
+              examples:
+                '404':
+                  value:
+                    error_code: 404000
+                    error_message: not found student
+                    error_key: not_found_student
+        '422':
+          description: raise error when updating record
+          content:
+            application/json:
+              examples:
+                '422':
+                  value:
+                    error_code: 422000
+                    error_message: 'unprocessable entity: {:error=>[]}'
+                    error_key: unprocessable_entity_result
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - student
+  /api/v1/student:
+    summary: Teacher Actions
+    get:
+      summary: Get Current Teacher Info
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          description: Return Teacher Info
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data:
+                      user_id: 36
+                      student_id: 16
+                      name: Man 36
+                      email: valid_36@example.com
+                      status: inactive
+        '401':
+          description: token is invalid
+        '404':
+          description: This User Has No Student Auth
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    error_code: 404000
+                    error_message: not found student
+                    error_key: not_found_student
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - student
+  /api/v1/courses:
+    summary: Courses Actions
+    get:
+      summary: Get All Course Infos
+      description: ''
+      operationId: 'indexCourse'
+      responses:
+        '200':
+          description: When all right
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data:
+                      - name: Course Name1
+                        credit: 3
+                        schedules:
+                          Mon:
+                            - 0800-0850
+                            - 0900-0950
+                            - 1000-1050
+                        teachers:
+                          - name: Man 10
+                            lab: Lab 9
+                      - name: Course Name2
+                        credit: 3
+                        schedules:
+                          Mon:
+                            - 0800-0850
+                            - 0900-0950
+                            - 1000-1050
+                          Fri:
+                            - 0900-0950
+                            - 1000-1050
+                        teachers:
+                          - name: Man 10
+                            lab: Lab 9
+                          - name: Man 11
+                            lab: Lab 10
+      tags:
+        - course
+    post:
+      summary: Create Course
+      description: ''
+      operationId: 'createCourse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/create_course'
+      responses:
+        '200':
+          description: Return Course Info
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data:
+                      id: 1
+                      name: Course Name
+                      credit: 3
+                      created_at: null
+                      updated_at: null
+                      schedules:
+                        Mon:
+                          - 0800-0850
+                          - 0900-0950
+                          - 1000-1050
+                        Tue:
+                          - 1100-1150
+                          - 1200-1250
+                          - 1300-1350
+                        Wed:
+                          - 1400-1450
+                          - 1500-1550
+                          - 1600-1650
+                        Thu:
+                          - 1700-1750
+                          - 1800-1850
+                        Fri:
+                          - 0800-0850
+                          - 0900-0950
+                        Sat:
+                          - 1000-1050
+                          - 1100-1150
+                        Sun:
+                          - 1200-1250
+                          - 1300-1350
+        '400':
+          description: Bad Request
+        '422':
+          description: raise error when saving record
+          content:
+            application/json:
+              examples:
+                '422':
+                  value:
+                    error_code: 422000
+                    error_message: 'unprocessable entity: {:error=>[]}'
+                    error_key: unprocessable_entity_result
+      tags:
+        - course
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+    patch:
+      summary: Update Current Course Info
+      description: ''
+      operationId: 'updateCourse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/update_course'
+      responses:
+        '200':
+          description: When all right
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data: {}
+        '400':
+          description: params are not enough
+        '401':
+          description: no token or invalid token
+        '404':
+          description: User Has No Teacher Auth
+          content:
+            application/json:
+              examples:
+                '404':
+                  value:
+                    error_code: 404000
+                    error_message: not found course
+                    error_key: not_found_course
+        '422':
+          description: raise error when updating record
+          content:
+            application/json:
+              examples:
+                '422':
+                  value:
+                    error_code: 422000
+                    error_message: 'unprocessable entity: {:error=>[]}'
+                    error_key: unprocessable_entity_result
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - course
+    delete:
+      summary: Delete Current Course Info
+      description: ''
+      operationId: 'destroyCourse'
+      parameters:
+        - name: id
+          in: query
+          description: course id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Delete Successd
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data: {}
+        '401':
+          description: no token or invalid token
+        '404':
+          description: User Has No Teacher Auth
+          content:
+            application/json:
+              examples:
+                '404':
+                  value:
+                    error_code: 404000
+                    error_message: not found course
+                    error_key: not_found_course
+        '422':
+          description: raise error when updating record
+          content:
+            application/json:
+              examples:
+                '422':
+                  value:
+                    error_code: 422000
+                    error_message: 'unprocessable entity: {:error=>[]}'
+                    error_key: unprocessable_entity_result
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - course
+  /api/v1/courses/assign_course:
+    summary: Assign A Course To Teacher
+    post:
+      summary: Assign A Course To Teacher
+      description: ''
+      operationId: 'assign_courseTeacher'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/assign_course'
+      responses:
+        '200':
+          description: When all right
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data: {}
+        '401':
+          description: token is invalid
+        '404':
+          description: not found object
+          content:
+            application/json:
+              examples:
+                no_teacher:
+                  value:
+                    error_code: 404000
+                    error_message: not found teacher
+                    error_key: not_found_teacher
+                no_course:
+                  value:
+                    error_code: 404_002
+                    error_message: not found course
+                    error_key: not_found_course
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - course
+  /api/v1/courses/unassign_course:
+    summary: Unassign A Course To Teacher
+    post:
+      summary: Unassign A Course To Teacher
+      description: ''
+      operationId: 'unassign_courseTeacher'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/unassign_course'
+      responses:
+        '200':
+          description: When all right
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data: {}
+        '401':
+          description: token is invalid
+        '404':
+          description: not found object
+          content:
+            application/json:
+              examples:
+                no_teacher:
+                  value:
+                    error_code: 404000
+                    error_message: not found teacher
+                    error_key: not_found_teacher
+                no_course:
+                  value:
+                    error_code: 404_002
+                    error_message: not found course
+                    error_key: not_found_course
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - course
+  /api/v1/courses/course_list:
+    summary: Get The Course List From The Teacher
+    get:
+      summary: Get The Course List From The Teacher
+      description: ''
+      operationId: 'course_listCourse'
+      parameters:
+        - name: teacher_id
+          in: query
+          description: The Teacher ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: When all right
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data:
+                      - id: 20
+                        name: Course Name
+                        credit: 3
+                        created_at: '2024-03-15T19:07:29.153Z'
+                        updated_at: '2024-03-15T19:07:29.153Z'
+                        schedules:
+                          '1':
+                            - 1
+                            - 2
+                            - 3
+                      - id: 21
+                        name: Course Name
+                        credit: 3
+                        created_at: '2024-03-15T19:07:29.158Z'
+                        updated_at: '2024-03-15T19:07:29.158Z'
+                        schedules:
+                          '1':
+                            - 1
+                            - 2
+                            - 3
+        '404':
+          description: not found object
+          content:
+            application/json:
+              examples:
+                no_teacher:
+                  value:
+                    error_code: 404000
+                    error_message: not found teacher
+                    error_key: not_found_teacher
+      tags:
+        - course
+  /api/v1/courses/register_course:
+    summary: Register A Course To Student
+    post:
+      summary: Register A Course To Student
+      description: ''
+      operationId: 'register_courseCourse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/register_course'
+      responses:
+        '200':
+          description: When all right
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data: {}
+        '401':
+          description: token is invalid
+        '404':
+          description: not found object
+          content:
+            application/json:
+              examples:
+                no_teacher:
+                  value:
+                    error_code: 404000
+                    error_message: not found student
+                    error_key: not_found_student
+                no_course:
+                  value:
+                    error_code: 404_002
+                    error_message: not found course
+                    error_key: not_found_course
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - course
+  /api/v1/courses/unregister_course:
+    summary: Unregister A Course To Student
+    post:
+      summary: Unregister A Course To Student
+      description: ''
+      operationId: 'unregister_courseCourse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/unregister_course'
+      responses:
+        '200':
+          description: When all right
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data: {}
+        '401':
+          description: token is invalid
+        '404':
+          description: not found object
+          content:
+            application/json:
+              examples:
+                no_teacher:
+                  value:
+                    error_code: 404000
+                    error_message: not found student
+                    error_key: not_found_student
+                no_course:
+                  value:
+                    error_code: 404_002
+                    error_message: not found course
+                    error_key: not_found_course
+      security:
+        - oauth2Password:
+            - valid
+            - invalid
+      tags:
+        - course
+  /api/v1/courses/student_list:
+    summary: Get The Student List From The Course
+    get:
+      summary: Get The Student List From The Course
+      description: ''
+      operationId: 'student_listCourse'
+      parameters:
+        - name: id
+          in: query
+          description: The Course ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: When all right
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    data:
+                      - name: Man 16
+                        email: valid_16@example.com
+                        status: inactive
+                      - name: Man 17
+                        email: valid_17@example.com
+                        status: inactive
+        '401':
+          description: token is invalid
+        '404':
+          description: not found object
+          content:
+            application/json:
+              examples:
+                no_course:
+                  value:
+                    error_code: 404_002
+                    error_message: not found course
+                    error_key: not_found_course
+                no_teacher:
+                  value:
+                    error_code: 404000
+                    error_message: not found course
+                    error_key: not_found_course
+      tags:
+        - course
+  /login:
+    summary: User Login
+    post:
+      summary: Login
+      description: ''
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login'
+      responses:
+        '200':
+          description: Should Return Token Info
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    access_token: yRdVC_NQhcL_B-RQ1CPNumRagOWFNA7ZvHYpVRNcQbQ
+                    token_type: Bearer
+                    expires_in: 7200
+                    refresh_token: Qyf299bTU1Atop2eiNhHrcVeTz7BGj64mqEW4d6pnPo
+                    created_at: 1710562089
+        '400':
+          description: bad parameters
+      tags:
+        - token
+  /logout:
+    summary: User Logout
+    post:
+      summary: Logout
+      description: ''
+      operationId: logout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/logout'
+      responses:
+        '200':
+          description: Will Logout
+        '400':
+          description: bad parameters
+      tags:
+        - token
+        
+components:
+  schemas:
+    create_user:
+      type: object
+      properties:
+        email:
+          type: string
+          example: test@example.com
+        name:
+          type: string
+          example: LarsonKao
+        client_id:
+          type: string
+          example: sOUMuViE68BoVK4SRvC4lFulrTTQgRdMA241c6RpU4k
+        password:
+          type: string
+          example: 1qaz@WSX
+    update_user:
+      type: object
+      properties:
+        name:
+          type: string
+          example: NewName
+    create_teacher:
+      type: object
+      properties:
+        lab:
+          type: string
+          example: LAB202
+    update_teacher:
+      type: object
+      properties:
+        lab:
+          type: string
+          example: LAB 100
+    create_course:
+      type: object
+      properties:
+        name:
+          type: string
+        schedules:
+          type: object
+          example:
+            '1':
+              - 1
+              - 2
+              - 3
+            '2':
+              - 4
+              - 5
+              - 6
+            '3':
+              - 7
+              - 8
+              - 9
+            '4':
+              - 10
+              - 11
+            '5':
+              - 1
+              - 2
+            '6':
+              - 3
+              - 4
+            '7':
+              - 5
+              - 6
+        credit:
+          type: integer
+    update_course:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        schedules:
+          type: object
+          example:
+            '1':
+              - 1
+              - 2
+              - 3
+            '2':
+              - 4
+              - 5
+              - 6
+            '3':
+              - 7
+              - 8
+              - 9
+            '4':
+              - 10
+              - 11
+            '5':
+              - 1
+              - 2
+            '6':
+              - 3
+              - 4
+            '7':
+              - 5
+              - 6
+        credit:
+          type: integer
+    assign_course:
+      type: object
+      properties:
+        course_id:
+          type: integer
+          example: 1
+    unassign_course:
+      type: object
+      properties:
+        course_id:
+          type: integer
+          example: 1
+    create_student:
+      type: object
+      properties:
+        status:
+          type: string
+          example: inactive
+    update_student:
+      type: object
+      properties:
+        status:
+          type: string
+          example: active
+    register_course:
+      type: object
+      properties:
+        course_id:
+          type: integer
+          example: 1
+    unregister_course:
+      type: object
+      properties:
+        course_id:
+          type: integer
+          example: 1
+    login:
+      type: object
+      properties:
+        email:
+          type: string
+          example: test@example.com
+        password:
+          type: string
+          example: password
+        grant_type:
+          type: string
+          example: password
+        client_id:
+          type: string
+          example: 11rD_NPUo9D15hrTuFfgege3iAabZn9gfgnBlEw2-4I
+        client_secret:
+          type: string
+          example: bP78bifQNcAJM0O-hdBNU07e_NBBqS-bh7CmL5cKxr0
+    logout:
+      type: object
+      properties:
+        token:
+          type: string
+          example: oKgYZlR-9TSwg_hIa3Y_Ecgjbo5Qx_8-Dc3yrLM129c
+        client_id:
+          type: string
+          example: 11rD_NPUo9D15hrTuFfgege3iAabZn9gfgnBlEw2-4I
+        client_secret:
+          type: string
+          example: bP78bifQNcAJM0O-hdBNU07e_NBBqS-bh7CmL5cKxr0
+          
+  securitySchemes:
+    oauth2Password:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /oauth/token
+          scopes:
+            valid: the token is valid
+            invalid: the token is invalid
