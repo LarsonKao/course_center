@@ -19,6 +19,9 @@ forbidden_client_id:
 create_course_forbidden:
   error_code: 403_001 
   error_message: have no auth to create
+not_course_teacher:
+  error_code: 403_002
+  error_message: cant check student list
 
 #:not_found 404
 not_found_teacher:

@@ -32,6 +32,7 @@ Rails.application.routes.draw do
           post 'assign_course', action: :assign_course
           post 'unassign_course', action: :unassign_course
           get 'course_list', action: :course_list
+          get 'student_list', action: :student_list
           post 'register_course', action: :register_course
           post 'unregister_course', action: :unregister_course
         end

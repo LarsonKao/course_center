@@ -2,7 +2,7 @@ module Api::V1
   class CoursesController < ApplicationController
     skip_before_action :doorkeeper_authorize!, only: [:show, :index, :course_list]
     before_action :permission_check!, only: [:update, :create, :destroy]
-    before_action :check_course!, only: [:update, :show, :destroy]
+    before_action :check_course!, only: [:update, :show, :destroy, :student_list]
     before_action :check_schedules_format!, only: [:create]
 
     VALID_KEYS = [1, 2, 3, 4, 5, 6, 7].freeze
@@ -87,6 +87,20 @@ module Api::V1
       teacher = Teacher.find_by(id: course_list_params[:teacher_id])
       return error_response(:not_found_teacher) if teacher.nil?
       result = teacher.courses
+      success_response(result)
+    end
+
+    def student_list
+      teacher = current_user.teacher
+      return error_response(:not_found_teacher) if teacher.nil?
+      return error_response(:not_course_teacher) if current_course.teachers.exclude?(teacher)
+      result = current_course.students.map do |s|
+        {
+          name: s.user.name,
+          email: s.user.email,
+          status: s.status
+        }
+      end
       success_response(result)
     end
 
